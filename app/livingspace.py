@@ -6,3 +6,4 @@ class Livingspace(Room):
         super().__init__(room_name, capacity, room_type)
         capacity = 4
         room_type = 'Livingspace'
+        livingspaces_list = []
