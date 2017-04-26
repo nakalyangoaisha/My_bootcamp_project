@@ -8,20 +8,20 @@ class Office(Room):
         Room.__init__(self, room_name, capacity, room_type)
         self.office_occupants_list = []
 
-    def check_office_assignable(self):
+    def is_office_assignable(self):
         if len(self.office_occupants_list) < self.capacity:
             return True
         else:
-            return 'Office is full'
+            return False
 
-    def assign_allocated_office(self, name):
+    def assign_allocated_staffandfellows_office(self, name):
         if len(self.office_occupants_list) < self.capacity:
             self.office_occupants_list.append(name)
             return True
         else:
             return False
 
-    def length_of_office_list(self):
+    def len_office_occupants_list(self):
         return len(self.office_occupants_list)
 
 
