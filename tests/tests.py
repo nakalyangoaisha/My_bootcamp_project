@@ -1,4 +1,5 @@
 import unittest
+from random import Random
 from unittest import TestCase
 
 from app.dojo import Dojo, Dojo_instance
@@ -27,6 +28,7 @@ class Test_ClassRelationships(TestCase):
 class TestClasses(unittest.TestCase):
     def setUp(self):
         self.Dojo_instance = Dojo()
+        global random
 
     def test_office(self):
         office = Office('room_name')
@@ -49,23 +51,32 @@ class TestClasses(unittest.TestCase):
         initial_room_count = len(self.Dojo_instance.room_list)
         a_office = Dojo_instance.create_room('a', 'office')
         self.assertTrue(a_office)
-        self.assertTrue(isinstance(a_office, Office))
-        new_room_count = len(Dojo_instance.allrooms)
+        new_room_count = len(Dojo_instance.room_list)
         self.assertEqual(new_room_count - initial_room_count, 1)
 
         b_livingspace = Dojo_instance.create_room('b', 'livingspace')
         self.assertTrue(b_livingspace)
-        self.assertTrue(isinstance(b_livingspace, Livingspace))
+        new_room_count = len(Dojo_instance.room_list)
         self.assertEqual(new_room_count - initial_room_count, 2)
 
     def test_add_person_successfully(self):
         initial_people_count = len(Dojo_instance.people_list)
         aisha_fellow = Dojo_instance.add_person('aisha', 'fellow')
         self.assertTrue(aisha_fellow)
-        new_people_count = len(Dojo_instance.allpeople)
+        new_people_count = len(Dojo_instance.people_list)
         self.assertEqual(new_people_count - initial_people_count, 1)
+
         noor_staff = Dojo_instance.add_person('noor', 'staff')
+        self.assertTrue(noor_staff)
+        new_people_count = len(Dojo_instance.people_list)
         self.assertEqual(new_people_count - initial_people_count, 2)
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
