@@ -1,4 +1,11 @@
+from abc import ABCMeta, abstractmethod
+
+
 class Person:
-    def __init__(self, name, position):
+    __metaclass__ = ABCMeta
+
+    def __init__(self, name, position, accommodate='No'):
         self.name = name
         self.position = position
+        self.accommodate = accommodate
+
