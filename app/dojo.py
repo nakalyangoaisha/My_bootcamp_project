@@ -1,9 +1,8 @@
 from random import randint
 
-from app.fellow import Fellow
-from app.livingspace import Livingspace
-from app.office import Office
-from app.staff import Staff
+from livingspace import Livingspace
+from office import Office
+from staff import Staff
 
 
 class Dojo:
@@ -37,7 +36,6 @@ class Dojo:
                 elif room_type is 'livingspace':
                     livingspace = Livingspace(room_name, room_type)
                     self.rooms_dict[room_name] = livingspace
-                    self.rooms_dict.update({'room_name': 'room_type'})
                     self.livingspaces['available'].append(livingspace)
                     return True
         else:
@@ -83,45 +81,45 @@ class Dojo:
 
     def allocate_room(self, name, room_type):
         if isinstance(name, str) and isinstance(room_type, str):
-            if name or room_type == '':
+            if name == '' or room_type == '':
                 return 'name and room_type can not be empty'
             else:
                 if name not in self.people_dict.keys():
                     return 'Add person to people_dict first'
                 else:
                     if room_type == 'office':
-                        if name in self.people_dict.keys():
-                            if self.people_dict[name].position == 'staff':
-                                if name in self.staff_office_allocations.keys():
-                                    return 'Staff has already been allocated an office'
-                                else:
-                                    self.staff_office_allocations[name] = self.offices['available'][
-                                        randint(0, (len(self.offices['available']) - 1))]
-                                    self.staff_office_allocations_list.append(self.staff_office_allocations)
-                                    for room in self.offices['available']:
-                                        if not room.is_room_assignable:
-                                            self.offices['unavailable'].append(room)
-                                            self.offices['available'].remove(room)
-                                            print('%s has reached its maximum capacity') % room
-                                            self.unallocated_people.append(name)
-                                        elif room.is_room_assignable:
-                                            room.add_person_to_room(name)
-
-                            elif self.people_dict[name].position == 'fellow':
-                                if name in self.fellow_office_allocations.keys():
-                                    return 'Fellow has already been allocated an office'
-                                else:
-                                    self.fellow_office_allocations[name] = self.offices['available'][
-                                        randint(0, (len(self.offices['available']) - 1))]
-                                    self.fellow_office_allocations_list.append(self.fellow_office_allocations)
-                                    for room in self.offices['available']:
-                                        if not room.is_room_assignable:
-                                            self.offices['unavailable'].append(room)
-                                            self.offices['available'].remove(room)
-                                            print('%s has reached its maximum capacity') % room
-                                            self.unallocated_people.append(name)
-                                        elif room.is_room_assignable:
-                                            room.add_person_to_room(name)
+                        if self.people_dict[name].position == 'staff':
+                            if name in self.staff_office_allocations.keys():
+                                return 'Staff has already been allocated an office'
+                            else:
+                                self.staff_office_allocations[name] = self.offices['available'][
+                                    randint(0, (len(self.offices['available']) - 1))]
+                                self.staff_office_allocations_list.append(self.staff_office_allocations)
+                                for room in self.offices['available']:
+                                    if not room.is_room_assignable():
+                                        self.offices['unavailable'].append(room)
+                                        self.offices['available'].remove(room)
+                                        print('%s has reached its maximum capacity') % room
+                                        self.unallocated_people.append(name)
+                                    elif room.is_room_assignable:
+                                        room.add_person_to_room(name)
+                                        return True
+                        elif self.people_dict[name].position == 'fellow':
+                            if name in self.fellow_office_allocations.keys():
+                                return 'Fellow has already been allocated an office'
+                            else:
+                                self.fellow_office_allocations[name] = self.offices['available'][
+                                    randint(0, (len(self.offices['available']) - 1))]
+                                self.fellow_office_allocations_list.append(self.fellow_office_allocations)
+                                for room in self.offices['available']:
+                                    if not room.is_room_assignable:
+                                        self.offices['unavailable'].append(room)
+                                        self.offices['available'].remove(room)
+                                        print('%s has reached its maximum capacity') % room
+                                        self.unallocated_people.append(name)
+                                    elif room.is_room_assignable:
+                                        room.add_person_to_room(name)
+                                        return True
 
                     else:
                         if room_type == 'livingspace':
@@ -140,12 +138,39 @@ class Dojo:
 
         else:
             return 'Name and room_type should be strings'
-                                        # def reallocate_person(self, name, room_name):
-                                        #     available_rooms = []
-                                        #     for room in self.offices['available']:
-                                        #         available_rooms.append(room)
-                                        #     for room in self.livingspaces['available']:
-                                        #         available_rooms.append(room)
-                                        #     for name in self.people_dict.keys():
-                                        #         if name in self.unallocated_people:
-                                        #             pass
+            # def reallocate_person(self, name, room_name):
+            #     available_rooms = []
+            #     for room in self.offices['available']:
+            #         available_rooms.append(room)
+            #     for room in self.livingspaces['available']:
+            #         available_rooms.append(room)
+            #     for name in self.people_dict.keys():
+            #         if name in self.unallocated_people:
+            #             pass
+
+    def print_room(self, room_name):
+        if room_name in self.rooms_dict:
+           for item in self.rooms_dict:
+               if item == 'room_name':
+                print(room_name.room_occupants_list)
+
+
+Mydojo = Dojo()
+print(Mydojo.create_room('aisha', 'office'))
+print(Mydojo.create_room('noor', 'office'))
+print(Mydojo.create_room('rukie', 'livingspace'))
+print(Mydojo.add_person('aisha nakalyango', 'staff'))
+print(Mydojo.add_person('aisha najuuma', 'fellow'))
+print(Mydojo.add_person('hadia najuuma', 'fellow', 'Yes'))
+print(Mydojo.people_dict)
+print(Mydojo.rooms_dict)
+print(Mydojo.allocate_room('aisha nakalyango', 'office'))
+print(Mydojo.allocate_room('aisha najuuma', 'office'))
+print(Mydojo.allocate_room('hadia najuuma', 'office'))
+print(Mydojo.allocate_room('hadia najuuma', 'livingspace'))
+print(Mydojo.rooms_dict['aisha'].len_room_occupants_list())
+print(Mydojo.rooms_dict['noor'].len_room_occupants_list())
+print(Mydojo.rooms_dict['aisha'].room_occupants_list)
+Mydojo.print_room('aisha')
+print(Mydojo.staff_office_allocations)
+print(Mydojo.fellow_office_allocations)
